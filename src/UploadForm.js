@@ -1,35 +1,36 @@
-import react from "react";
-import { render } from "react-dom/cjs/react-dom.production.min";
+import react, { useState } from "react";
+import UploadFrame from "./UploadFrame";
 
 function UploadForm() {
+  const [TA, setTA] = useState({
+    serv: {
+      tirmap1f: ["root", "login00"],
+      tirmap2f: ["aaa", "bbb"],
+    },
+    ssch: {},
+    solid: {},
+    ams: {},
+  });
   const IRM = {
     serv: {
       tirmap1f_os: ["root", "login00"],
       tirmap2f_os: ["root", "login00"],
     },
   };
-  var TA = {
-    serv: {},
-    ssch: {},
-    solid: {},
-    ams: {},
-  };
-  console.log(IRM);
+
   const getText = (e) => {
     var reader = new FileReader();
     reader.onload = function (ev) {
-      console.log(TA);
       //console.log(e.name);
       //console.log(reader.result);
       const ret = reader.result.split("\r\n");
-      TA = {
+      setTA({
         ...TA,
         serv: {
           ...TA.serv,
           [e.name]: ret,
         },
-      };
-      console.log(TA);
+      });
     };
     reader.readAsText(e);
   };
@@ -41,7 +42,6 @@ function UploadForm() {
     console.log(file.length);
     for (var i = 0; i < file.length; i++) {
       getText(file[i]);
-      document.ssch.contents.value = JSON.stringify(TA);
     }
   };
 
@@ -64,15 +64,19 @@ function UploadForm() {
         <textarea name="contents" rows="10" cols="40"></textarea>
       </form>
 
+      <br />
       <button
         onClick={(e) => {
           e.preventDefault();
-          document.ssch.contents.value = JSON.stringify(TA);
-          console.log(Object.keys(TA).map((key) => key));
+          //console.log(Object.keys(TA).map((key) => key));
+          console.log(TA);
         }}
       >
         showTA
       </button>
+      {Object.keys(TA).map((key) => (
+        <UploadFrame category={key} TA={TA} setTA={setTA} />
+      ))}
     </div>
   );
 }
