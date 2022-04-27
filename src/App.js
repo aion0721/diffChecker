@@ -1,6 +1,7 @@
 import "./styles.css";
 import ListTable from "./ListTable";
 import UploadForm from "./UploadForm";
+import DiffCheck from "./DiffCheck";
 
 export default function App() {
   const test1 = ["a", "b", "c", "f"];
@@ -32,6 +33,7 @@ export default function App() {
       </div>
       <ListTable test1={test1} test2={test2} />
       <UploadForm />
+      <DiffCheck />
     </>
   );
 }

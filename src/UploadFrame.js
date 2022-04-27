@@ -1,6 +1,7 @@
-import react from "react";
+import react, { useState } from "react";
 
 function UploadFrame(props) {
+  var [tmpArray, setTmpArray] = useState({});
   const cate = props.category;
   var TA = props.TA;
   const getText = (e) => {
@@ -9,15 +10,16 @@ function UploadFrame(props) {
       //console.log(e.name);
       //console.log(reader.result);
       const ret = reader.result.split("\r\n");
-      const beforeValue = TA[cate];
-      props.setTA({
-        ...TA,
-        [cate]: {
-          ...TA[cate],
-          [e.name]: ret,
-        },
-      });
-      console.log(TA);
+      //console.log(TA[cate]);
+      setTmpArray((beforeValue) => ({ ...beforeValue, [e.name]: ret }));
+      //props.setTA({
+      //  ...TA,
+      //  [cate]: {
+      //    ...TA[cate],
+      //    [e.name]: ret,
+      //  },
+      //});
+      //console.log(TA);
     };
     reader.readAsText(e);
   };
@@ -30,6 +32,14 @@ function UploadFrame(props) {
     for (var i = 0; i < file.length; i++) {
       getText(file[i]);
     }
+    console.log(tmpArray);
+    props.setTA({
+      ...TA,
+      [cate]: {
+        ...TA[cate],
+        tmpArray,
+      },
+    });
   };
 
   return (
@@ -42,6 +52,14 @@ function UploadFrame(props) {
         }}
       >
         Button
+      </button>
+      <button
+        onClick={(e) => {
+          e.preventDefault();
+          console.log(tmpArray);
+        }}
+      >
+        test
       </button>
     </form>
   );
